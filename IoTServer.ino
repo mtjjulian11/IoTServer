@@ -8,10 +8,13 @@ int keyIndex = 0;            // your network key Index number (needed only for W
 WiFiClient  client;
 
 // Weather station channel details
-unsigned long Modulo2ChannelNumber = SECRET_CH_ID_MODULO2;
-unsigned int inclinacionXFieldNumber = 1;
-unsigned int inclinacionYFieldNumber = 2;
-const char * Modulo2ReadAPIKey = SECRET_READ_APIKEY_MODULO2;
+unsigned long readChannelNumber = SECRET_CH_ID;
+unsigned long x = 1;
+unsigned long y = 2;
+unsigned long z = 3;
+
+
+const char * readAPIKey = SECRET_READ_APIKEY;
 
 void setup() {
   Serial.begin(115200);      // Initialize serial 
@@ -35,11 +38,11 @@ void loop() {
   }
 
   // Leemos del campo correspondiente al eje X
-  long inclinacionX = ThingSpeak.readLongField(Modulo2ChannelNumber, inclinacionXFieldNumber, Modulo2ReadAPIKey);    
+ long x = ThingSpeak.readLongField(readChannelNumber, x, readAPIKey);    
   // Check the status of the read operation to see if it was successful
   statusCode = ThingSpeak.getLastReadStatus();
   if(statusCode == 200){
-    Serial.println("La inclinacion de X es: " + String(inclinacionX) + "º");
+    Serial.println("Valor de X es: " + String(x) + "º");
     //Servo.write(inclinacionX);
   }
   else{
@@ -47,17 +50,29 @@ void loop() {
   }
 
   // Leemos del campo correspondiente al eje Y
-  long inclinacionY = ThingSpeak.readLongField(Modulo2ChannelNumber, inclinacionYFieldNumber, Modulo2ReadAPIKey);    
+ long y = ThingSpeak.readLongField(readChannelNumber, y, readAPIKey);    
   // Check the status of the read operation to see if it was successful
   statusCode = ThingSpeak.getLastReadStatus();
   if(statusCode == 200){
-    Serial.println("La inclinacion de Y es: " + String(inclinacionY) + "º");
+    Serial.println("Valor de Y es: " + String(y) + "º");
     //Servo.write(inclinacionY);
   }
   else{
     Serial.println("Problem reading channel. HTTP error code " + String(statusCode)); 
   }
-  
+
+  // We read Z
+ 
+   long z = ThingSpeak.readLongField(readChannelNumber, z, readAPIKey);    
+  // Check the status of the read operation to see if it was successful
+  statusCode = ThingSpeak.getLastReadStatus();
+  if(statusCode == 200){
+    Serial.println("Vslor de Z es: " + String(z) + "º");
+    //Servo.write(inclinacionY);
+  }
+  else{
+    Serial.println("Problem reading channel. HTTP error code " + String(statusCode)); 
+  }
   delay(3000); // No need to read the temperature too often.
 
 }
