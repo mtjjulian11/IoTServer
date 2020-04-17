@@ -9,10 +9,9 @@ WiFiClient  client;
 
 // Weather station channel details
 unsigned long readChannelNumber = SECRET_CH_ID;
-unsigned long x = 1;
-unsigned long y = 2;
-unsigned long z = 3;
-
+unsigned int Xdata = 1;
+unsigned int Ydata = 2;
+unsigned int Zdata = 3;
 
 const char * readAPIKey = SECRET_READ_APIKEY;
 
@@ -38,11 +37,15 @@ void loop() {
   }
 
   // Leemos del campo correspondiente al eje X
- long x = ThingSpeak.readLongField(readChannelNumber, x, readAPIKey);    
+
+
+
+  
+  long x = ThingSpeak.readLongField(readChannelNumber, Xdata, readAPIKey);    
   // Check the status of the read operation to see if it was successful
   statusCode = ThingSpeak.getLastReadStatus();
   if(statusCode == 200){
-    Serial.println("Valor de X es: " + String(x) + "º");
+   Serial.println("Valor de X es: " + String(x) + "Gs");
     //Servo.write(inclinacionX);
   }
   else{
@@ -50,11 +53,11 @@ void loop() {
   }
 
   // Leemos del campo correspondiente al eje Y
- long y = ThingSpeak.readLongField(readChannelNumber, y, readAPIKey);    
-  // Check the status of the read operation to see if it was successful
+ long y = ThingSpeak.readLongField(readChannelNumber, Ydata, readAPIKey);    
+ // Check the status of the read operation to see if it was successful
   statusCode = ThingSpeak.getLastReadStatus();
   if(statusCode == 200){
-    Serial.println("Valor de Y es: " + String(y) + "º");
+    Serial.println("Valor de Y es: " + String(y) + "Gs");
     //Servo.write(inclinacionY);
   }
   else{
@@ -63,12 +66,12 @@ void loop() {
 
   // We read Z
  
-   long z = ThingSpeak.readLongField(readChannelNumber, z, readAPIKey);    
+   long z = ThingSpeak.readLongField(readChannelNumber, Zdata, readAPIKey);    
   // Check the status of the read operation to see if it was successful
   statusCode = ThingSpeak.getLastReadStatus();
   if(statusCode == 200){
-    Serial.println("Vslor de Z es: " + String(z) + "º");
-    //Servo.write(inclinacionY);
+   Serial.println("Vslor de Z es: " + String(z) + "Gs");
+    //Servo.write(inclinacionZ);
   }
   else{
     Serial.println("Problem reading channel. HTTP error code " + String(statusCode)); 
