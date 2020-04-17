@@ -2,7 +2,7 @@
 #include <WiFiNINA.h>
 #include "secrets.h"
 
-char ssid[] = SECRET_SSID;   // your network SSID (name) 
+char ssid[] = SECRET_SSID;   // your network SSID (name)
 char pass[] = SECRET_PASS;   // your network password
 int keyIndex = 0;            // your network key Index number (needed only for WEP)
 WiFiClient  client;
@@ -15,66 +15,84 @@ unsigned int Zdata = 3;
 
 const char * readAPIKey = SECRET_READ_APIKEY;
 
+
 void setup() {
-  Serial.begin(115200);      // Initialize serial 
-  ThingSpeak.begin(client);  // Initialize ThingSpeak 
+  Serial.begin(115200);      // Initialize serial
+  ThingSpeak.begin(client);  // Initialize ThingSpeak
 }
 
 void loop() {
 
   int statusCode = 0;
-  
+
   // Connect or reconnect to WiFi
-  if(WiFi.status() != WL_CONNECTED){
+  if (WiFi.status() != WL_CONNECTED) {
     Serial.print("Attempting to connect to SSID: ");
     Serial.println(SECRET_SSID);
-    while(WiFi.status() != WL_CONNECTED){
+    while (WiFi.status() != WL_CONNECTED) {
       WiFi.begin(ssid, pass); // Connect to WPA/WPA2 network. Change this line if using open or WEP network
       Serial.print(".");
-      delay(5000);     
-    } 
+      delay(5000);
+    }
     Serial.println("\nConnected");
   }
 
-  // Leemos del campo correspondiente al eje X
+  // Obtain values for field Y X
 
-
-
-  
-  long x = ThingSpeak.readLongField(readChannelNumber, Xdata, readAPIKey);    
+  long x = ThingSpeak.readIntField(readChannelNumber, Xdata, readAPIKey);
   // Check the status of the read operation to see if it was successful
   statusCode = ThingSpeak.getLastReadStatus();
-  if(statusCode == 200){
-   Serial.println("Valor de X es: " + String(x) + "Gs");
+
+  // Mapping of the Read Field parameter
+  //float mapX= map(x,-4.0,4.0,1.0,10.0);
+
+  if (statusCode == 200) {
+    Serial.println("Value X: " + String(x));
     //Servo.write(inclinacionX);
+   
   }
-  else{
-    Serial.println("Problem reading channel. HTTP error code " + String(statusCode)); 
-  }
-
-  // Leemos del campo correspondiente al eje Y
- long y = ThingSpeak.readLongField(readChannelNumber, Ydata, readAPIKey);    
- // Check the status of the read operation to see if it was successful
-  statusCode = ThingSpeak.getLastReadStatus();
-  if(statusCode == 200){
-    Serial.println("Valor de Y es: " + String(y) + "Gs");
-    //Servo.write(inclinacionY);
-  }
-  else{
-    Serial.println("Problem reading channel. HTTP error code " + String(statusCode)); 
+  else {
+    Serial.println("Problem reading channel. HTTP error code " + String(statusCode));
   }
 
-  // We read Z
- 
-   long z = ThingSpeak.readLongField(readChannelNumber, Zdata, readAPIKey);    
+
+
+  // Obtain values for field Y
+
+  long y = ThingSpeak.readIntField(readChannelNumber, Ydata, readAPIKey);
   // Check the status of the read operation to see if it was successful
   statusCode = ThingSpeak.getLastReadStatus();
-  if(statusCode == 200){
-   Serial.println("Vslor de Z es: " + String(z) + "Gs");
+
+  // Mapping of the Read Field parameter
+  //float mapY = map(y, -10.0, 4.0, 1.0, 10.0);
+
+
+  if (statusCode == 200) {
+    Serial.println("Value Y: " + String(y));
+    //Servo.write(inclinacionY);
+   
+  }
+  else {
+    Serial.println("Problem reading channel. HTTP error code " + String(statusCode));
+  }
+
+  // Obtain values for field Z
+
+  long z = ThingSpeak.readIntField(readChannelNumber, Zdata, readAPIKey);
+  // Check the status of the read operation to see if it was successful
+  statusCode = ThingSpeak.getLastReadStatus();
+
+  // Mapping of the Read Field parameter
+  //float mapZ = map(z, -4.0, 4.0, 1.0, 10.0);
+
+
+  if (statusCode == 200) {
+    Serial.println("Value Z: " + String(z));
     //Servo.write(inclinacionZ);
   }
-  else{
-    Serial.println("Problem reading channel. HTTP error code " + String(statusCode)); 
+    
+  else {
+    Serial.println("Problem reading channel. HTTP error code " + String(statusCode));
   }
   delay(3000); // No need to read the temperature too often.
 
